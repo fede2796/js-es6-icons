@@ -118,10 +118,10 @@ const selectElement = document.getElementById('select-change');
 console.log(selectElement);
 
 
-fontIconArrayToDraw(fontIconArray);
+fontIconArrayToDraw(fontIconArray,fontIcon);
 
 // creamo la funzione per disegnare le icone
-function fontIconArrayToDraw(fontIconArray){
+function fontIconArrayToDraw(fontIconArray,fontIcon){
 	
 	fontIconArray.forEach((element) => {
 		
@@ -133,8 +133,8 @@ function fontIconArrayToDraw(fontIconArray){
 		
 		const SingleBoxIcon = `
     <div class="box-icon">
-	<i class="${family} ${prefix}${name} fa-2x" style="color:${randomColor}; "></i>
-	<span class="icon-name">${name}</span>
+      <i class="${family} ${prefix}${name} fa-2x" style="color:${randomColor}; "></i>
+			<span class="icon-name">${name}</span>
     </div>
 		`;
 
@@ -142,28 +142,57 @@ function fontIconArrayToDraw(fontIconArray){
 	});
 }
 
+let typeIcons = "all";
+// creamo la funzione per creare le option nella select
+fontIconArray.forEach((element) => {
+	
+	if (typeIcons === "all"){
+		
+		const selectOption = `
+		<option value="${typeIcons}">${typeIcons}</option>
+		`;
+
+		selectElement.innerHTML += selectOption;
+
+		typeIcons = "second";
+	}
+	else if(element.type !==  typeIcons){
+		
+		const selectOption = `
+			<option value="${element.type}">${element.type}</option>
+		`;
+
+		selectElement.innerHTML += selectOption;
+
+		typeIcons = element.type;
+	}
+
+});
+
+
 selectElement.addEventListener('change', (event) => {
   
 	fontIcon.innerHTML = "";
 
 	if(selectElement.value !== "all"){
 		
-		const changecolor = fontIconArray.filter((element) =>{
-			return element.type === selectElement.value
+		const iconToPrint = fontIconArray.filter((element) =>{
+			return element.type === selectElement.value;
 		});
-		fontIconArrayToDraw(changecolor);
+
+		fontIconArrayToDraw(iconToPrint ,fontIcon);
 
 	} else {
 		
-		fontIconArrayToDraw(fontIconArray);
+		fontIconArrayToDraw(fontIconArray ,fontIcon);
 	}
 });
 
 function getRandomColor() {
-	let letters = '0123456789ABCDEF';
-	let color = '#';
-	for (let i = 0; i < 6; i++) {
-	  color += letters[Math.floor(Math.random() * 16)];
-	}
-	return color;
+  let letters = '0123456789ABCDEF';
+  let color = '#';
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
 }
