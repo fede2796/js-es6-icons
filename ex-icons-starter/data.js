@@ -1,4 +1,4 @@
-[
+let fontIconArray = [
 	{
 		name: 'cat',
 		prefix: 'fa-',
@@ -112,3 +112,58 @@
 		color: 'blue'
 	}
 ];
+
+const fontIcon = document.querySelector('.js-container');
+const selectElement = document.getElementById('select-change');
+console.log(selectElement);
+
+
+fontIconArrayToDraw(fontIconArray);
+
+// creamo la funzione per disegnare le icone
+function fontIconArrayToDraw(fontIconArray){
+	
+	fontIconArray.forEach((element) => {
+		
+		const {name,prefix,type,family,color} = element;
+
+		const randomColor = getRandomColor();
+
+		element.color = randomColor;
+		
+		const SingleBoxIcon = `
+    <div class="box-icon">
+	<i class="${family} ${prefix}${name} fa-2x" style="color:${randomColor}; "></i>
+	<span class="icon-name">${name}</span>
+    </div>
+		`;
+
+		fontIcon.innerHTML += SingleBoxIcon;
+	});
+}
+
+selectElement.addEventListener('change', (event) => {
+  
+	fontIcon.innerHTML = "";
+
+	if(selectElement.value !== "all"){
+		
+		const changecolor = fontIconArray.filter((element) =>{
+			return element.type === selectElement.value
+		});
+		fontIconArrayToDraw(changecolor);
+
+	} else {
+		
+		fontIconArrayToDraw(fontIconArray);
+	}
+});
+
+function getRandomColor() {
+	let letters = '0123456789ABCDEF';
+	let color = '#';
+	for (let i = 0; i < 6; i++) {
+	  color += letters[Math.floor(Math.random() * 16)];
+	}
+	return color;
+}
